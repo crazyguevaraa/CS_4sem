@@ -21,7 +21,7 @@ err_t check_bitset (bitset_t* bitset){
     return OK;
 }
 
-bitset_t* bit_ctor (int cap){
+bitset_t* bit_ctor (unsigned long cap){
     if (cap < 1) return NULL;
 
     unsigned long num = 0; 

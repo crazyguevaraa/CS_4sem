@@ -35,7 +35,7 @@ typedef enum ERR {
 } err_t;
 
 unsigned long    bit_cap               (bitset_t *bitset);
-bitset_t*        bit_ctor              (int cap);
+bitset_t*        bit_ctor              (unsigned long cap);
 err_t            bit_dtor              (bitset_t *bitset);
 err_t            bit_set_all           (bitset_t *bitset);
 err_t            bit_unset_all         (bitset_t *bitset);
