@@ -223,4 +223,40 @@ int bit_find_first_set (bitset_t* bitset){
     err_t err = OK;
     if ((err = check_bitset (bitset)) != OK) return err; 
     
+    for (;;){
+
+    }
+}
+
+int bit_find_fisrt_unset (bitset_t* bitset){
+    err_t err = OK;
+    if ((err = check_bitset (bitset)) != OK) return err;
+
+    for (;;){
+
+    }
+}
+
+int bit_find_last_set (bitset_t* bitset){
+    err_t err = OK;
+    if ((err = check_bitset (bitset)) != OK) return err;
+
+    for (;;){
+
+    }
+}
+
+int bit_find_last_unset (bitset_t* bitset){
+    err_t err = OK;
+    if ((err = check_bitset (bitset)) != OK) return err;
+
+    for (;;){
+
+    }
+}
+
+err_t dump_bitset (bitset_t* bitset, const char* path){
+    err_t err = OK;
+    if ((err = check_bitset (bitset)) != OK) return err;
+
 }

@@ -1,9 +1,9 @@
 #include <assert.h>
+
 #include "test.h"
 #include "stdlib.h"
 
 int run_all (){
-    int  run_all                ();
     void test_create            ();
     void test_setup_all         ();
     void test_check_setup_all   ();
@@ -47,13 +47,57 @@ void test_err (){
 
 void test_create (){
     bitset_t* bitset = bit_ctor (0);
+
     assert (bitset == NULL);
     assert (bit_dtor (bitset) == INV_SET);
+
     bitset = bit_ctor (128);
     assert (bit_cap (bitset) == 128);
     assert (bit_dtor (bitset) != INV_ARR);
+    
+    bitset = bit_ctor (68);
+    assert (bit_cap (bitset) > 68);
+    bit_dtor (bitset);
+}
 
+void test_setup_all (){
+    bitset_t* bitset = bit_ctor (128);
+    
+    assert (bit_set_all (bitset) == OK);
+    for (unsigned long i = 0; i < bitset->cap / ELEM; i++){
+            assert (bitset->set[i]);
+    }
+    
+    assert (bit_unset_all (bitset) == OK);
+    for (unsigned long i = 0; i < bitset->cap / ELEM; i++){
+        assert (!bitset->set[i]);
+    }
 
+    assert (bit_set_val_all (bitset, SET) == OK);
+    for (unsigned long i = 0; i < bitset->cap / ELEM; i++){
+            assert (bitset->set[i]);
+    }
+    
+    assert (bit_set_val_all (bitset, UNSET) == OK);
+    for (unsigned long i = 0; i < bitset->cap / ELEM; i++){
+        assert (!bitset->set[i]);
+    }
+
+    assert (bit_rvs (bitset) == OK);
+    for (unsigned long i = 0; i < bitset->cap / ELEM; i++){
+            assert (bitset->set[i]);
+    }
+
+    assert (bit_rvs (bitset) == OK);
+    for (unsigned long i = 0; i < bitset->cap / ELEM; i++){
+            assert (!bitset->set[i]);
+    }  
+
+    bit_dtor (bitset);
+}
+
+void test_setup (){
+    bitset_t* bitset = bit_ctor (128);
 
 
 }

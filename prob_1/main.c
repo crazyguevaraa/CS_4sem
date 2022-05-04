@@ -1,12 +1,8 @@
+#include "bit_array.h"
+#include "../tests/test.h"
 
 
-
-
-struct bit {
-    int array[];
+int main(int argc, char* argv[]){
+    run_all ();
+    
 }
-
-void 
-create_array (int& bit.array, int num);
-
-void 
