@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.10)
 
 
-project(Map C)
+project(bitset)
 
 set(CMAKE_C_STANDARD 11)
 
