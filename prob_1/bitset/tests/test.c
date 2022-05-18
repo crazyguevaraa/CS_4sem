@@ -82,7 +82,7 @@ void test_setup_all (){
     }
 
     assert (bit_rvs (bitset) == OK);
-    for (size_t i = 0; i < &bitset->cap / ELEM; i++){
+    for (size_t i = 0; i < bitset->cap / ELEM; i++){
             assert (bitset->set[i]);
     }
 

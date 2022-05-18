@@ -1,11 +1,6 @@
 #include "../include/bit_array.h"
 
 
-struct Bitset{
-    int*    set;
-    size_t  cap;
-}; 
-
 
 err_t check_bitset (bitset_t bitset){
     if (bitset == NULL) return INV_SET;

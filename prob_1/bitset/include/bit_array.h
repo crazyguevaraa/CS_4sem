@@ -12,7 +12,11 @@ enum SIZE {
     ELEM    = 64
 };
 
-struct Bitset;
+struct Bitset{
+    int*    set;
+    size_t  cap;
+}; 
+
 typedef struct Bitset* bitset_t;
 
 typedef enum BIT {
