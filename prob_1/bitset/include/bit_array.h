@@ -54,11 +54,8 @@ err_t            check_bitset          (bitset_t *bitset);
 err_t            dump_bitset           (bitset_t *bitset, const char *path);
 int              bit_get               (bitset_t *bitset, int pos);
 size_t           bit_count             (bitset_t *bitset);
-int              bit_find_set          (bitset_t *bitset, size_t offset);
-int              bit_find_unset        (bitset_t *bitset);
-int              bit_find_last_set     (bitset_t *bitset);
-int              bit_find_last_unset   (bitset_t *bitset);
-int              bit_find_pos          (bitset_t *bitset, int );
+ssize_t          bit_find_set          (bitset_t* bitset, size_t offset, ssize_t len);
+ssize_t          bit_find_unset        (bitset_t* bitset, size_t offset, ssize_t len);
 
 
 

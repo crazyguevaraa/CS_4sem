@@ -218,85 +218,86 @@ size_t bit_count (bitset_t* bitset){
 
     return res;
 }
-
-int bit_find_first_set (bitset_t* bitset){
+ssize_t bit_find_set (bitset_t* bitset, size_t offset, ssize_t len){
     err_t err = OK;
     if ((err = check_bitset (bitset)) != OK) return err;
 
-    size_t res = bitset->cap - 1, i = 0;
-    for (i = bitset->cap / ELEM - 1; i >= 0; i--){
-
-        if (bitset->set[i]) break;
-        res -= ELEM;
-    }
-
-    if (res < 0) return FAIL;
-    int cur = bitset->set[i];
-
-    for (size_t offset = ELEM - 1; offset >= 0; offset--){
-
-        if (cur & ((int) 1 << offset)) break;
-        res--;
-    }
-
-    return res;
-}
-
-int bit_find_fisrt_unset (bitset_t* bitset){
-    err_t err = OK;
-    if ((err = check_bitset (bitset)) != OK) return err;
-
-    for (;;){
-
-    }
-}
-
-int bit_find_last_set (bitset_t* bitset){
-    err_t err = OK;
-    if ((err = check_bitset (bitset)) != OK) return err;
-
-    for (;;){
-
-    }
-}
-
-int bit_find_last_unset (bitset_t* bitset){
-    err_t err = OK;
-    if ((err = check_bitset (bitset)) != OK) return err;
-
-    size_t res = bitset->cap - 1, i = 0;
-    for (i = bitset->cap / ELEM - 1; i >= 0; i--){
-
-        if (bitset->set[i] != ULLONG_MAX) break;
-        res -= ELEM;
-    }
-
-    if (res < 0) return FAIL;
-    int cur = bitset->set[i];
-
-    for (size_t offset = ELEM - 1; offset >= 0; offset--){
-
-        if (!(cur & ((int) 1 << offset))) break;
-        res--;
-    }
-
-    return res;
-}
-int bit_find_set (bitset_t* bitset, size_t offset){
-    err_t err = OK;
-    if ((err = check_bitset (bitset)) != OK) return err;
-
-    int* buffer = ((int*) bitset->cap) + offset / 64;
+    ssize_t   pos = 0;
+    int*      buffer = ((int*) bitset->cap) + offset / 64;
     const int r_shift = offset % 64;
 
     if (r_shift != 0){
+        
+        int fst_qwrd = (*buffer) >> r_shift;
+        pos = ffsll (fst_qwrd) - 1;
 
+        if (r_shift + len <= 64){
+
+            if (pos != FAIL && pos < len) return offset +pos;
+            return FAIL;
+        }
+        if (pos != FAIL) return offset + pos;
+        
+        ++buffer;
+        len -= 64 - r_shift;
+        pos = offset + (64 - r_shift);
+    } else pos = offset;
+
+    int num = len / 64 + (len % 64 != 0), i = 0;
+    ssize_t add_pos = -1;
+
+    for (i; i < num; ++i){
+
+        if (buffer[i]){
+
+            add_pos = ffsll (buffer[i]) - 1;
+            break;
+        }
     }
-
-
-
-
+    if (add_pos != -1 && add_pos < len) return i * 64 + pos + add_pos;
+    return FAIL;
 }
+
+ssize_t bit_find_unset (bitset_t* bitset, size_t offset, ssize_t len){
+    err_t err = OK;
+    if ((err = check_bitset (bitset)) != OK) return err;
+
+    ssize_t   pos = 0;
+    int*      buffer = ((int*) bitset->cap) + offset / 64;
+    const int r_shift = offset % 64;
+
+    if (r_shift != 0){
+        
+        int fst_qwrd = (*buffer) >> r_shift;
+        pos = ffsll (~fst_qwrd) - 1;
+
+        if (r_shift + len <= 64){
+
+            if (pos != FAIL && pos < len) return offset +pos;
+            return FAIL;
+        }
+        if (pos != FAIL) return offset + pos;
+        
+        ++buffer;
+        len -= 64 - r_shift;
+        pos = offset + (64 - r_shift);
+    } else pos = offset;
+
+    int num = len / 64 + (len % 64 != 0), i = 0;
+    ssize_t add_pos = -1;
+
+    for (i; i < num; ++i){
+
+        if (buffer[i] != ULONG_MAX){
+            
+            add_pos = ffsll (~buffer[i]) - 1;
+            break;
+        }
+    }
+    if (add_pos != -1 && add_pos < len) return i * 64 + pos + add_pos;
+    return FAIL;
+}
+
 err_t dump_bitset (bitset_t* bitset, const char* path){
     err_t err = OK;
     if ((err = check_bitset (bitset)) != OK) return err;
