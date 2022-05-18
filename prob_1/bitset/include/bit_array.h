@@ -23,7 +23,7 @@ typedef enum BIT {
 
 typedef enum ERR {
     OK          =  0,
-    NO_MATCH    = -1,
+    FAIL        = -1,
     ALLOC_ERR   = -2,
     REALLOC_ERR = -3,
     UNKNOWN_ERR = -4,

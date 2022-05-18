@@ -221,11 +221,25 @@ size_t bit_count (bitset_t* bitset){
 
 int bit_find_first_set (bitset_t* bitset){
     err_t err = OK;
-    if ((err = check_bitset (bitset)) != OK) return err; 
-    
-    for (;;){
+    if ((err = check_bitset (bitset)) != OK) return err;
 
+    size_t res = bitset->cap - 1, i = 0;
+    for (i = bitset->cap / ELEM - 1; i >= 0; i--){
+
+        if (bitset->set[i]) break;
+        res -= ELEM;
     }
+
+    if (res < 0) return FAIL;
+    int cur = bitset->set[i];
+
+    for (size_t offset = ELEM - 1; offset >= 0; offset--){
+
+        if (cur & ((int) 1 << offset)) break;
+        res--;
+    }
+
+    return res;
 }
 
 int bit_find_fisrt_unset (bitset_t* bitset){
@@ -250,9 +264,23 @@ int bit_find_last_unset (bitset_t* bitset){
     err_t err = OK;
     if ((err = check_bitset (bitset)) != OK) return err;
 
-    for (;;){
+    size_t res = bitset->cap - 1, i = 0;
+    for (i = bitset->cap / ELEM - 1; i >= 0; i--){
 
+        if (bitset->set[i] != ULLONG_MAX) break;
+        res -= ELEM;
     }
+
+    if (res < 0) return FAIL;
+    int cur = bitset->set[i];
+
+    for (size_t offset = ELEM - 1; offset >= 0; offset--){
+
+        if (!(cur & ((int) 1 << offset))) break;
+        res--;
+    }
+
+    return res;
 }
 int bit_find_set (bitset_t* bitset, size_t offset){
     err_t err = OK;
@@ -261,10 +289,13 @@ int bit_find_set (bitset_t* bitset, size_t offset){
     int* buffer = ((int*) bitset->cap) + offset / 64;
     const int r_shift = offset % 64;
 
+    if (r_shift != 0){
+
+    }
 
 
 
-    
+
 }
 err_t dump_bitset (bitset_t* bitset, const char* path){
     err_t err = OK;
