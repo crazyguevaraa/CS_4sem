@@ -1,6 +1,6 @@
 #include <assert.h>
 #include <stdlib.h>
-#include "../include/bit_array.h"
+//#include "../include/bit_array.h"
 #include "test.h"
 
 void run_all (){
