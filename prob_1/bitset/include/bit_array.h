@@ -11,8 +11,8 @@ enum SIZE {
 };
 
 struct bitset{
-    int*           set;
-    unsigned long  cap;
+    int*    set;
+    size_t  cap;
 }; 
 typedef struct bitset bitset_t;
 
@@ -37,8 +37,8 @@ typedef enum ERR {
     INV_SET     = -12
 } err_t;
 
-unsigned long    bit_cap               (bitset_t *bitset);
-bitset_t*        bit_ctor              (unsigned long cap);
+size_t           bit_cap               (bitset_t *bitset);
+bitset_t*        bit_ctor              (size_t cap);
 err_t            bit_dtor              (bitset_t *bitset);
 err_t            bit_set_all           (bitset_t *bitset);
 err_t            bit_unset_all         (bitset_t *bitset);
@@ -53,11 +53,12 @@ err_t            bit_set_val           (bitset_t *bitset, int pos, bit_t val);
 err_t            check_bitset          (bitset_t *bitset);
 err_t            dump_bitset           (bitset_t *bitset, const char *path);
 int              bit_get               (bitset_t *bitset, int pos);
-int              bit_count             (bitset_t *bitset);
-int              bit_find_first_set    (bitset_t *bitset);
-int              bit_find_first_unset  (bitset_t *bitset);
+size_t           bit_count             (bitset_t *bitset);
+int              bit_find_set          (bitset_t *bitset, size_t offset);
+int              bit_find_unset        (bitset_t *bitset);
 int              bit_find_last_set     (bitset_t *bitset);
 int              bit_find_last_unset   (bitset_t *bitset);
+int              bit_find_pos          (bitset_t *bitset, int );
 
 
 
