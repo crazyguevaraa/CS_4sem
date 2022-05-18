@@ -17,6 +17,7 @@ CFLAGS += $(OTHER_FLAGS)
 LDFLAGS += $(OTHER_FLAGS)
 
 TEST_SRC = bitset/tests/test.c
+TEST_HEADER = bitset/tests/test.h
 LIB_SRC  = bitset/src/bit_array.c
 LIB_HEADER = bitset/include/bit_array.h
 
