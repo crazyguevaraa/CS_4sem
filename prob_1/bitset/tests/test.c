@@ -1,7 +1,8 @@
 #include <assert.h>
 
 #include "test.h"
-#include "stdlib.h"
+#include <stdlib.h>
+#include "../include/bit_array.h"
 
 int run_all (){
     void test_create            ();
@@ -103,7 +104,7 @@ void test_setup (){
 }
 
 void test_check_setup_all (){
-    
+
 }
 
 void test_find (){

@@ -1,7 +1,6 @@
 #pragma once
 #define CALLOC_TESTS
 
-#include "../include/bit_array.h"
 
 int  run_all                ();
 void test_create            ();
