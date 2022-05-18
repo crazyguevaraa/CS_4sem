@@ -3,6 +3,8 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <limits.h>
+#include <unistd.h>
+#include <string.h>
 
 enum SIZE {
     DEFAULT = 2,
@@ -10,10 +12,7 @@ enum SIZE {
     ELEM    = 64
 };
 
-struct bitset{
-    int*    set;
-    size_t  cap;
-}; 
+
 typedef struct bitset bitset_t;
 
 typedef enum BIT {

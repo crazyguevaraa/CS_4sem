@@ -1,5 +1,5 @@
-#include "bit_array.h"
-#include "../tests/test.h"
+#include "bitset/include/bit_array.h"
+#include "bitset/tests/test.h"
 
 
 int main(int argc, char* argv[]){

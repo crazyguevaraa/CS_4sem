@@ -64,32 +64,32 @@ void test_setup_all (){
     bitset_t* bitset = bit_ctor (128);
     
     assert (bit_set_all (bitset) == OK);
-    for (unsigned long i = 0; i < bitset->cap / ELEM; i++){
+    for (size_t i = 0; i < bitset->cap / ELEM; i++){
             assert (bitset->set[i]);
     }
     
     assert (bit_unset_all (bitset) == OK);
-    for (unsigned long i = 0; i < bitset->cap / ELEM; i++){
+    for (size_t i = 0; i < bitset->cap / ELEM; i++){
         assert (!bitset->set[i]);
     }
 
     assert (bit_set_val_all (bitset, SET) == OK);
-    for (unsigned long i = 0; i < bitset->cap / ELEM; i++){
+    for (size_t i = 0; i < bitset->cap / ELEM; i++){
             assert (bitset->set[i]);
     }
     
     assert (bit_set_val_all (bitset, UNSET) == OK);
-    for (unsigned long i = 0; i < bitset->cap / ELEM; i++){
+    for (size_t i = 0; i < bitset->cap / ELEM; i++){
         assert (!bitset->set[i]);
     }
 
     assert (bit_rvs (bitset) == OK);
-    for (unsigned long i = 0; i < bitset->cap / ELEM; i++){
+    for (size_t i = 0; i < bitset->cap / ELEM; i++){
             assert (bitset->set[i]);
     }
 
     assert (bit_rvs (bitset) == OK);
-    for (unsigned long i = 0; i < bitset->cap / ELEM; i++){
+    for (size_t i = 0; i < bitset->cap / ELEM; i++){
             assert (!bitset->set[i]);
     }  
 
@@ -98,6 +98,33 @@ void test_setup_all (){
 
 void test_setup (){
     bitset_t* bitset = bit_ctor (128);
+
+
+}
+
+void test_check_setup_all (){
+    
+}
+
+void test_find (){
+
+    bitset_t* bitset = bit_ctor (10);
+
+    assert (bit_find_set (NULL, 0, 3) == FAIL);
+    assert (bit_find_unset (NULL, 0, 3) == FAIL);
+
+    bit_unset_all (bitset);
+
+    bit_set (bitset, 4);
+    bit_set (bitset, 6);
+    assert (bit_find_set (bitset, 0, 6) == 4);
+    assert (bit_find_set (bitset, 3, 7) == 4);
+    
+    bit_rvs (bitset);
+    assert (bit_find_unset (bitset, 0, 5) == 4);
+    assert (bit_find_unset (bitset, 3, 7) == 4); 
+
+    bit_dtor (bitset);
 
 
 }
