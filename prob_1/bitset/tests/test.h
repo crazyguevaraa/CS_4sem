@@ -2,7 +2,7 @@
 #define CALLOC_TESTS
 
 
-int  run_all                ();
+void run_all                ();
 void test_create            ();
 void test_setup_all         ();
 void test_check_setup_all   ();
