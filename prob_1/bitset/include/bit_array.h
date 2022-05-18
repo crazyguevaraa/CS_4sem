@@ -13,7 +13,6 @@ enum SIZE {
 };
 
 
-typedef struct bitset bitset_t;
 
 typedef enum BIT {
     SET   = 1,
