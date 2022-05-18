@@ -5,9 +5,9 @@ struct Bitset{
     int*    set;
     size_t  cap;
 }; 
-typedef struct Bitset bitset_t;
 
-err_t check_bitset (bitset_t* bitset){
+
+err_t check_bitset (bitset_t bitset){
     if (bitset == NULL) return INV_SET;
 
     if (bitset->set == NULL){
@@ -21,11 +21,11 @@ err_t check_bitset (bitset_t* bitset){
     return OK;
 }
 
-bitset_t* bit_ctor (size_t cap){
+bitset_t bit_ctor (size_t cap){
     if (cap < 1) return NULL;
 
     size_t num = 0; 
-    bitset_t* bitset = (bitset_t*) calloc (1, sizeof (bitset_t));
+    bitset_t bitset = (bitset_t) calloc (1, sizeof (struct Bitset));
 
     if (bitset == NULL) return NULL;
 
@@ -46,7 +46,7 @@ bitset_t* bit_ctor (size_t cap){
     return bitset;
 }
 
-err_t bit_dtor (bitset_t* bitset){
+err_t bit_dtor (bitset_t bitset){
     if (bitset == NULL) return INV_SET;
     if (bitset->set == NULL){
         free (bitset);
@@ -61,14 +61,14 @@ err_t bit_dtor (bitset_t* bitset){
     return OK;
 }
 
-size_t bit_cap (bitset_t* bitset){
+size_t bit_cap (bitset_t bitset){
     err_t err = OK;
     if ((err = check_bitset (bitset)) != OK) return err;
 
     return bitset->cap; 
 }
 
-err_t bit_set_all (bitset_t* bitset){
+err_t bit_set_all (bitset_t bitset){
     err_t err = OK;
     if ((err = check_bitset (bitset)) != OK) return err; 
 
@@ -79,7 +79,7 @@ err_t bit_set_all (bitset_t* bitset){
     return OK;
 }
 
-err_t bit_unset_all (bitset_t* bitset){
+err_t bit_unset_all (bitset_t bitset){
     err_t err = OK;
     if ((err = check_bitset (bitset)) != OK) return err; 
 
@@ -90,7 +90,7 @@ err_t bit_unset_all (bitset_t* bitset){
     return OK;
 }
 
-err_t bit_set_val_all (bitset_t* bitset, bit_t val){
+err_t bit_set_val_all (bitset_t bitset, bit_t val){
     err_t err = OK;
     if ((err = check_bitset (bitset)) != OK) return err;  
 
@@ -101,7 +101,7 @@ err_t bit_set_val_all (bitset_t* bitset, bit_t val){
     else return INV_VAL;
 }
 
-err_t bit_check_set_all (bitset_t* bitset){
+err_t bit_check_set_all (bitset_t bitset){
     err_t err = OK;
     if ((err = check_bitset (bitset)) != OK) return err;
 
@@ -112,7 +112,7 @@ err_t bit_check_set_all (bitset_t* bitset){
     return 1;
 }
 
-err_t bit_check_unset_all (bitset_t* bitset){
+err_t bit_check_unset_all (bitset_t bitset){
     err_t err = OK;
     if ((err = check_bitset (bitset)) != OK) return err;
 
@@ -123,7 +123,7 @@ err_t bit_check_unset_all (bitset_t* bitset){
     return 1; 
 }
 
-err_t bit_check_set_any (bitset_t* bitset){
+err_t bit_check_set_any (bitset_t bitset){
     err_t err = OK;
     if ((err = check_bitset (bitset)) != OK) return err;
 
@@ -134,7 +134,7 @@ err_t bit_check_set_any (bitset_t* bitset){
     return 0;
 }
 
-err_t bit_rvs (bitset_t* bitset){
+err_t bit_rvs (bitset_t bitset){
     err_t err = OK;
     if ((err = check_bitset (bitset)) != OK) return err;
 
@@ -145,7 +145,7 @@ err_t bit_rvs (bitset_t* bitset){
     return OK;
 }
 
-err_t bit_set (bitset_t* bitset, int pos){
+err_t bit_set (bitset_t bitset, int pos){
     if (pos < 0 || pos >= bitset->cap) return INV_POS;
 
     err_t err = OK;
@@ -159,7 +159,7 @@ err_t bit_set (bitset_t* bitset, int pos){
     return OK;
 }
 
-err_t bit_unset (bitset_t* bitset, int pos){
+err_t bit_unset (bitset_t bitset, int pos){
     if (pos < 0 || pos >= bitset->cap) return INV_POS;
 
     err_t err = OK;
@@ -175,7 +175,7 @@ err_t bit_unset (bitset_t* bitset, int pos){
     return OK;
 }
 
-err_t bit_set_val (bitset_t* bitset, int pos, bit_t val){
+err_t bit_set_val (bitset_t bitset, int pos, bit_t val){
     if (pos < 0 || pos >= bitset->cap) return INV_POS;
 
     err_t err = OK;
@@ -188,7 +188,7 @@ err_t bit_set_val (bitset_t* bitset, int pos, bit_t val){
     else return INV_VAL;
 }
 
-int bit_get (bitset_t* bitset, int pos){
+int bit_get (bitset_t bitset, int pos){
     if (pos < 0 || pos >= bitset->cap) return INV_POS;
 
     err_t err = OK;
@@ -202,7 +202,7 @@ int bit_get (bitset_t* bitset, int pos){
     return UNSET;
 }
 
-size_t bit_count (bitset_t* bitset){
+size_t bit_count (bitset_t bitset){
     err_t err = OK;
     if ((err = check_bitset (bitset)) != OK) return err;
 
@@ -218,7 +218,7 @@ size_t bit_count (bitset_t* bitset){
 
     return res;
 }
-ssize_t bit_find_set (bitset_t* bitset, size_t offset, ssize_t len){
+ssize_t bit_find_set (bitset_t bitset, size_t offset, ssize_t len){
     err_t err = OK;
     if ((err = check_bitset (bitset)) != OK) return err;
 
@@ -258,7 +258,7 @@ ssize_t bit_find_set (bitset_t* bitset, size_t offset, ssize_t len){
     return FAIL;
 }
 
-ssize_t bit_find_unset (bitset_t* bitset, size_t offset, ssize_t len){
+ssize_t bit_find_unset (bitset_t bitset, size_t offset, ssize_t len){
     err_t err = OK;
     if ((err = check_bitset (bitset)) != OK) return err;
 
@@ -298,7 +298,7 @@ ssize_t bit_find_unset (bitset_t* bitset, size_t offset, ssize_t len){
     return FAIL;
 }
 
-err_t dump_bitset (bitset_t* bitset, const char* path){
+err_t dump_bitset (bitset_t bitset, const char* path){
     err_t err = OK;
     if ((err = check_bitset (bitset)) != OK) return err;
 
