@@ -1,7 +1,7 @@
 #include <stdlib.h>
 
 #include "bitset/include/bit_array.h"
-#include "bitset/tests/test.h"
+#include "bitset/tests/test.c"
 
 
 int main(int argc, char* argv[]){
