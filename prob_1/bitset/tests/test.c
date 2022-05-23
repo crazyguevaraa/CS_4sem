@@ -4,12 +4,12 @@
 #include "test.h"
 
 void run_all (){
-    void test_create            ();
-    void test_setup_all         ();
-    void test_check_setup_all   ();
-    void test_setup             ();
-    void test_find              ();
-    void test_err               ();
+    test_create            ();
+    test_setup_all         ();
+    test_check_setup_all   ();
+    test_setup             ();
+    test_find              ();
+    test_err               ();
 }
 
 void test_err (){
