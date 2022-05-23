@@ -128,7 +128,11 @@ void test_check_setup_all (){
     assert (bit_check_set_all (bitset));
     assert (!bit_check_unset_all (bitset));
 
+    bit_unset_all (bitset);
+    assert (!bit_check_set_any (bitset));
     
+    bit_set (bitset, 4);
+    assert (bit_check_set_any (bitset));
 
 }
 

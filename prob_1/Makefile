@@ -28,7 +28,7 @@ EXEC = bitset.out
 TEST_EXEC = test.out
 
 LCOV_OUT_FOLDER = out
-BROWSER = chromium
+%BROWSER = chromium
 
 all: $(EXEC)
 
@@ -55,7 +55,6 @@ build_utests:
 view_coverage: test
 	lcov --capture --directory . --output-file coverage.info
 	genhtml coverage.info -o $(LCOV_OUT_FOLDER)
-	$(BROWSER) $(LCOV_OUT_FOLDER)/index.html
 
 valgrind: test_build
 	valgrind ./$(TEST_EXEC)
