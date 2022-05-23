@@ -68,7 +68,7 @@ err_t bit_set_all (bitset_t bitset){
     if ((err = check_bitset (bitset)) != OK) return err; 
 
     for (size_t i = 0; i < bitset->cap / ELEM; i++){
-        bitset->set[i] = ULONG_MAX;
+        bitset->set[i] = FAIL;
     }
 
     return OK;
@@ -241,7 +241,7 @@ ssize_t bit_find_set (bitset_t bitset, size_t offset, ssize_t len){
     int num = len / 64 + (len % 64 != 0), i = 0;
     ssize_t add_pos = -1;
 
-    for (i; i < num; ++i){
+    for (; i < num; ++i){
 
         if (buffer[i]){
 
@@ -281,7 +281,7 @@ ssize_t bit_find_unset (bitset_t bitset, size_t offset, ssize_t len){
     int num = len / 64 + (len % 64 != 0), i = 0;
     ssize_t add_pos = -1;
 
-    for (i; i < num; ++i){
+    for (; i < num; ++i){
 
         if (buffer[i] != ULONG_MAX){
             
@@ -296,5 +296,6 @@ ssize_t bit_find_unset (bitset_t bitset, size_t offset, ssize_t len){
 err_t dump_bitset (bitset_t bitset, const char* path){
     err_t err = OK;
     if ((err = check_bitset (bitset)) != OK) return err;
+    return 0;
 
 }
