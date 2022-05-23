@@ -2,7 +2,7 @@ CC = gcc
 LD = gcc
 RM = rm -rf
 
-CFLAGS = -g -Wall
+CFLAGS = -g -Wall -O0
 LDFLAGS = $(CFLAGS)
 
 OTHER_FLAGS = -MD
