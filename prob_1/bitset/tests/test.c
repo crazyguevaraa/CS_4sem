@@ -95,12 +95,40 @@ void test_setup_all (){
 }
 
 void test_setup (){
-    bitset_t bitset = bit_ctor (128);
+    bitset_t bitset = bit_ctor (10);
 
+    for (size_t i = 0; i < bitset->cap; i++){
+        assert (bit_set(bitset, i));
+        assert (bitset->set[i]);
+    }
 
+    for (size_t i = 0; i < bitset->cap; i++){
+        assert (bit_unset (bitset, i));
+        assert (!bitset->set[i]);
+    }
+
+    for (size_t i = 0; i < bitset->cap; i++){
+        assert (bit_set_val (bitset, i, SET));
+        assert (bitset->set[i]);
+    } 
+
+    for (size_t i = 0; i < bitset->cap; i++){
+        assert (bit_set_val (bitset, i, UNSET));
+        assert (!bitset->set[i]);
+    }
+
+    bit_dtor (bitset);
 }
 
 void test_check_setup_all (){
+    bitset_t bitset = bit_ctor (10);
+
+    bit_set_all (bitset);
+
+    assert (bit_check_set_all (bitset));
+    assert (!bit_check_unset_all (bitset));
+
+    
 
 }
 
