@@ -121,7 +121,7 @@ int main(int argc, char** argv) {
 void accept_forever(int server_sd, int no_threads) {
   double last_end = GENERAL_START_INT;
   double int_length = (double)(GENERAL_FINISH_INT - GENERAL_START_INT) / no_threads;
-  struct arg arg = (struct arg) malloc (sizeof(struct arg));
+  struct arg arg;
   arg.NT = 0;
   while (1) {
     int client_sd = accept(server_sd, NULL, NULL);
