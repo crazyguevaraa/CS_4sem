@@ -164,6 +164,6 @@ void* client_handler(void *arg){
   /* get results */
 
   read(client_sd, buf, sizeof(double));
-    
+  
 }
 

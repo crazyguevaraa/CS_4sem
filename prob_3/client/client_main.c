@@ -1,6 +1,15 @@
 #include "../clc_core/info.h"
 #include "../clc_core/calc.h"
 
+
+double func(double x)
+{
+    // y = ...
+    return x * x;
+}
+
+void stream_client_loop (int conn_sd, int numThreads);
+
 int main(int argc, char** argv) {
 
   // ----------- 1. Create socket object ------------------
@@ -37,8 +46,31 @@ int main(int argc, char** argv) {
     fprintf(stderr, "Could no connect: %s\n", strerror(errno));
     exit(1);
   }
+  char* cur_end = NULL;
+  int numThreads = (int) strtol(argv[1], &cur_end, 10);
+    if (errno || *cur_end != 0 || numThreads <= 0) {
+        printf("incorrect number of threads: %s, (interpret as: %d(int))\n", argv[1], numThreads);
+        exit(2);
+    }
 
-  stream_client_loop(conn_sd);
+  stream_client_loop(conn_sd, numThreads);
 
   return 0;
+}
+
+void stream_client_loop (int conn_sd, int numThreads){
+  /* reciv info from host*/
+  char buf[2*sizeof(double)];
+  read(conn_sd, buf, 2*sizeof(double));
+  double a, b;
+  memcpy((void*)&a, buf, sizeof(double));
+  memcpy((void*)&b, buf + sizeof(double), sizeof(double));
+
+  double res = icCalculateMT(numThreads, a, b, func);
+  
+  memcpy(buf, res, sizeof(double));
+
+  write(conn_sd, buf, sizeof(double));
+
+  
 }
