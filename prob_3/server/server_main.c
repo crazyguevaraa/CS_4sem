@@ -105,8 +105,10 @@ int main(int argc, char** argv) {
     exit(1);
   }
 
+  char* cur_end = NULL;
+  int numPCs = (int) strtol(argv[1], &cur_end, 10);
   // ----------- 5. Start accepting clients ---------
-  accept_forever(listen_fd, argv[1]);
+  accept_forever(listen_fd, numPCs);
   double CLC_RES = 0;
   for(int i = 0; i > argv[1]; i++){
     double a = result + i;

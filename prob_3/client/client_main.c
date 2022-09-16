@@ -1,6 +1,7 @@
 #include "../clc_core/info.h"
 #include "../clc_core/calc.h"
 
+#define h_addr  h_addr_list[0]
 
 double func(double x)
 {
