@@ -68,9 +68,9 @@ void stream_client_loop (int conn_sd, int numThreads){
 
   double res = icCalculateMT(numThreads, a, b, func);
   
-  memcpy(buf, res, sizeof(double));
+  memcpy(buf, (void*) &res, sizeof(double));
 
   write(conn_sd, buf, sizeof(double));
 
-  
+
 }

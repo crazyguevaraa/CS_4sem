@@ -1,4 +1,4 @@
-#include " ./clc_core/info.h"
+#include "./clc_core/info.h"
 
 struct sockaddr* sockaddr_new() {
   return malloc(sizeof(struct sockaddr_in));
@@ -7,6 +7,8 @@ struct sockaddr* sockaddr_new() {
 socklen_t sockaddr_sizeof() {
   return sizeof(struct sockaddr_in);
 }
+#define MAX_PC 10
+double result[MAX_PC];
 
 void* client_handler(void *arg);
 void accept_forever(int server_sd, int no_threads);
@@ -20,7 +22,7 @@ int main(int argc, char** argv) {
             strerror(errno));
     exit(1);
   }
-
+/*
   int non_zero = 1;
   if (setsockopt(listen_fd, SOL_SOCKET, SO_REUSEADDR, &non_zero, sizeof(non_zero)) != 0) {
     fprintf(stderr, "setsockopt : %s\n",
@@ -66,7 +68,7 @@ int main(int argc, char** argv) {
             strerror(errno));
     exit(1);  
   }
-
+*/
   struct hostent *svr;
 
   svr = gethostbyname(argv[2]);
@@ -104,7 +106,12 @@ int main(int argc, char** argv) {
 
   // ----------- 5. Start accepting clients ---------
   accept_forever(listen_fd, argv[1]);
-
+  double CLC_RES = 0;
+  for(int i = 0; i > argv[1]; i++){
+    CLC_RES += result[i];
+  }
+  
+  printf("CLC_RES = %f\n", CLC_RES);
   return 0;
 
 }
@@ -113,8 +120,7 @@ void accept_forever(int server_sd, int no_threads) {
   double last_end = GENERAL_START_INT;
   double int_length = (double)(GENERAL_FINISH_INT - GENERAL_START_INT) / no_threads;
   struct arg arg = (struct arg) malloc (sizeof(struct arg));
-  arg.res = 0;
-
+  arg.NT = 0;
   while (1) {
     int client_sd = accept(server_sd, NULL, NULL);
     if (client_sd == -1) {
@@ -129,11 +135,13 @@ void accept_forever(int server_sd, int no_threads) {
     arg.sd = client_sd;
     arg.a = a;
     arg.b = b;
-
+    
     pthread_t client_handler_thread;
     
     int result = pthread_create(&client_handler_thread, NULL,
             &client_handler, (void*) arg);
+    arg.NT++;
+
     if (result) {
       close(client_sd);
       close(server_sd);
@@ -154,7 +162,6 @@ void* client_handler(void *arg){
 
   double a = client_arg->a;
   double b = client_arg->b;
-
   char buf [2*sizeof(double)];
   memcpy(buf, a, sizeof(double));
   memcpy(buf + sizeof(double), b, sizeof(double));
@@ -162,8 +169,11 @@ void* client_handler(void *arg){
   write(client_sd, buf, 2*sizeof(double));
 
   /* get results */
-
+  int NT = arg->NT;
   read(client_sd, buf, sizeof(double));
   
+  double pc_res;
+  memcpy((void*) &pc_res, buf, sizeof(double));
+  result[NT] = pc_res;
 }
 

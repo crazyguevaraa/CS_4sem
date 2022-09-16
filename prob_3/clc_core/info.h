@@ -87,6 +87,7 @@ struct int_result
  struct arg
  {
         int sd;
+        int NT;
         double a;
         double b; 
  };
