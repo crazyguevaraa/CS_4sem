@@ -12,7 +12,15 @@ double func(double x)
 void stream_client_loop (int conn_sd, int numThreads);
 
 int main(int argc, char** argv) {
-
+  if (argc != 2) {
+        printf("invalid arguments command line:\n argc = %d\n", argc);
+        printf("They are:\n");
+        for (int i = 0; i < argc; i++)
+        {
+            printf ("[%d] %s\n", i, argv[i]);
+        }
+        exit(1);
+    }
   // ----------- 1. Create socket object ------------------
 
   int conn_sd = socket(AF_INET, SOCK_STREAM, 0);

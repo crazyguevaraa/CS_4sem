@@ -1,3 +1,4 @@
+#pragma once
 #include	<sys/types.h>	/* basic system data types */
 #include	<sys/socket.h>	/* basic socket definitions */
 

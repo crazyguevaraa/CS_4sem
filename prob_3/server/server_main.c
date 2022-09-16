@@ -15,61 +15,23 @@ void* client_handler(void *arg);
 void accept_forever(int server_sd, int no_threads);
 
 int main(int argc, char** argv) {
-
-  // ----------- 1. Create socket object ------------------
+  if (argc != 2) {
+        printf("invalid arguments command line:\n argc = %d\n", argc);
+        printf("They are:\n");
+        for (int i = 0; i < argc; i++)
+        {
+            printf ("[%d] %s\n", i, argv[i]);
+        }
+        exit(1);
+    }
+   // ----------- 1. Create socket object ------------------
   int listen_fd = socket(AF_INET, SOCK_STREAM, 0);
   if (listen_fd == -1) {
     fprintf(stderr, "Could not create socket: %s\n",
             strerror(errno));
     exit(1);
   }
-/*
-  int non_zero = 1;
-  if (setsockopt(listen_fd, SOL_SOCKET, SO_REUSEADDR, &non_zero, sizeof(non_zero)) != 0) {
-    fprintf(stderr, "setsockopt : %s\n",
-            strerror(errno));
-    exit(1);  
-  }
 
-  struct timeval accept_timeout = {
-            .tv_sec  = ACCEPT_TIMEOUT_SEC,
-            .tv_usec = ACCEPT_TIMEOUT_USEC
-    };
-
-  if (setsockopt(listen_fd, SOL_SOCKET, SO_RCVTIMEO, &accept_timeout, sizeof(accept_timeout)) != 0) {
-    fprintf(stderr, "setsockopt : %s\n",
-            strerror(errno));
-    exit(1);  
-  }
-  
-  if (setsockopt(listen_fd, SOL_SOCKET, SO_KEEPALIVE, &non_zero, sizeof(non_zero)) != 0) {
-    fprintf(stderr, "setsockopt : %s\n",
-            strerror(errno));
-    exit(1);  
-  }
-
-  int keep_cnt     = KEEP_CNT;
-  int keep_idle    = KEEP_IDLE;
-  int keep_intvl   = KEEP_INTVL;
-
-  if (setsockopt(listen_fd, IPPROTO_TCP, TCP_KEEPCNT, &keep_cnt, sizeof(int)) != 0) {
-    fprintf(stderr, "setsockopt : %s\n",
-            strerror(errno));
-    exit(1);  
-  }
-
-  if (setsockopt(listen_fd, IPPROTO_TCP, TCP_KEEPIDLE, &keep_idle, sizeof(int)) != 0) {
-    fprintf(stderr, "setsockopt : %s\n",
-            strerror(errno));
-    exit(1);  
-  }
-
-  if (setsockopt(listen_fd, IPPROTO_TCP, TCP_KEEPINTVL, &keep_intvl, sizeof(int)) != 0) {
-    fprintf(stderr, "setsockopt : %s\n",
-            strerror(errno));
-    exit(1);  
-  }
-*/
   struct hostent *svr;
 
   svr = gethostbyname(argv[2]);
@@ -87,6 +49,7 @@ int main(int argc, char** argv) {
   addr.sin_addr = *((struct in_addr*)svr->h_addr);
   addr.sin_port = htons(SERV_PORT);
 
+  
   int result = bind(listen_fd,
           (struct sockaddr*)&addr, sizeof(addr));
   if (result == -1) {

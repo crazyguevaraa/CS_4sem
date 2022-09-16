@@ -1,11 +1,12 @@
 # flags
-
+CC = gcc
 VALGRIND_FLAGS = --leak-check=full --show-leak-kinds=all
 
-CFLAGS = -g -MD -c -std=c99
+CFLAGS = -g -v -std=c99 -Werror -Wall -Wextra -Wnarrowing -Wwrite-strings -Wcast-qual -Wundef -Wstrict-prototypes -Wbad-function-cast -Wlong-long -Wconversion -Wunused-parameter
 ADDIT_FLAGS = -pthread -lm
 
 # pathes
+VPATH = clc_core client server
 LIB_PATH		= /clc_core
 LIB_SOURCES 	= $(LIB_PATH)/calc.c $(LIB_PATH)/CPUTopology.c
 LIB_OBJS		= $(LIB_SOURCES:.c=.o)
@@ -25,33 +26,34 @@ CLIENT_EXEC		= clt
 
 
 # names of output files
-
+.PHONY: all clean
 all: Bclient Bserver
 
 ### compile stuff
 
-%.o: %.c
-		$(CC) $(CFLAGS) -o $@ $<
-
 # client
 
-Bclient: $(CLIENT_SOURCES) $(CLIENT_EXEC)
+Bclient: client/client_main.o clc_core/calc.o
+		$(CC) $^ $(CFLAGS) -o $@
 
-$(CLIENT_EXEC): $(CLIENT_OBJS) $(LIB_OBJS) 
-		$(CC) $(CLIENT_OBJS) $(LIB_OBJS) $(ADDIT_FLAGS) -o $@
+Bserver: server/server_main.o
+		$(CC) $^ $(CFLAGS) -o $@
 
-# Server
+%.o: %.c %.h
+	$(CC) $< $(CFLAGS) -o $@
 
-Bserver: $(SERVER_SOURCES) $(SERVER_EXEC)
+client/client_main.o: client/client_main.c clc_core/info.h clc_core/calc.h 
+		$(CC) $< $(CFLAGS) -o $@
 
-$(SERVER_EXEC): $(SERVER_OBJS) $(LIB_OBJS) 
-		$(CC) $(SERVER_OBJS) $(LIB_OBJS) $(ADDIT_FLAGS) -o $@
+clc_core/calc.o: clc_core/calc.c clc_core/CPUTopology.c clc_core/calc.h clc_core/CPUTopology.h
+		$(CC) $^ $(CFLAGS) -o $@	
+
+server/server_main.o: server/server_main.c clc_core/info.h
+		$(CC) $^ $(CFLAGS) -o $@
 
 ## 
 
 -include *.d
-
-.PHONY: clean
 
 clean:
 	cd $(SERVER_PATH) && rm -rf *.o *.d
