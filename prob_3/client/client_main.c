@@ -28,7 +28,7 @@ int main(int argc, char** argv) {
   memset(&addr, 0, sizeof(addr));
   addr.sin_family = AF_INET;
   addr.sin_addr = *((struct in_addr*)host_entry->h_addr);
-  addr.sin_port = htons(6666);
+  addr.sin_port = htons(SERV_PORT);
 
   int result = connect(conn_sd,
           (struct sockaddr*)&addr, sizeof(addr));

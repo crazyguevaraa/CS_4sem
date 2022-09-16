@@ -150,29 +150,20 @@ void* client_handler(void *arg){
   struct sockaddr_in addrs;
   socklen_t addr_len = sizeof(addrs);
   struct arg* client_arg = (struct arg*) arg;
-  int* client_sd = client_arg->sd;
+  int client_sd = client_arg->sd;
 
-  struct timeval accept_timeout = {
-            .tv_sec  = ACCEPT_TIMEOUT_SEC,
-            .tv_usec = ACCEPT_TIMEOUT_USEC
-    };
-  if (setsockopt(client_sd, SOL_SOCKET, SO_RCVTIMEO, &accept_timeout, sizeof(accept_timeout)) != 0){
-    fprintf(stderr, "setsockopt : %s\n",
-            strerror(errno));
-    exit(1);  
-  }
-  addrs.sin_family = AF_INET;
-  addrs.sin_port   = htons(CL_PORT);
+  double a = client_arg->a;
+  double b = client_arg->b;
 
-  struct calc_info clc_pc = (struct calc_info) malloc (sizeof(struct calc_info));
-  clc_pc.a = arg.a;
-  clc_pc.b = arg.b;
+  char buf [2*sizeof(double)];
+  memcpy(buf, a, sizeof(double));
+  memcpy(buf + sizeof(double), b, sizeof(double));
 
-  sendto(client_sd, &clc_pc, sizeof(clc_pc), 0, (struct sockaddr *)(&addrs), addr_len);
+  write(client_sd, buf, 2*sizeof(double));
 
+  /* get results */
 
-    /* get results */
-  
+  read(client_sd, buf, sizeof(double));
     
 }
 
