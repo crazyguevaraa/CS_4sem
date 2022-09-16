@@ -1,13 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <errno.h>
-#include <unistd.h>
-
-#include <sys/socket.h>
-#include <netdb.h>
-
-#include <stream_client_core.h>
+#include "../clc_core/info.h"
 
 int main(int argc, char** argv) {
 
@@ -23,11 +14,11 @@ int main(int argc, char** argv) {
   // ------------ 2. Connect to server-- ------------------
 
   // Find the IP address behind the hostname
-  char host[] = "localhost";
+
   struct hostent* host_entry;
-  host_entry = gethostbyname(host);
+  host_entry = gethostbyname(argv[2]);
   if (!host_entry) {
-    fprintf(stderr, "Could not resolve the host '%s'\n", host);
+    fprintf(stderr, "Could not resolve the host '%s'\n", argv[2]);
     exit(1);
   }
 
@@ -35,7 +26,7 @@ int main(int argc, char** argv) {
   struct sockaddr_in addr;
   memset(&addr, 0, sizeof(addr));
   addr.sin_family = AF_INET;
-  addr.sin_addr = *((struct in_addr*)host_entry->h_addr);;
+  addr.sin_addr = *((struct in_addr*)host_entry->h_addr);
   addr.sin_port = htons(6666);
 
   int result = connect(conn_sd,
