@@ -68,3 +68,25 @@
 
 #define GENERAL_START_INT 0
 #define GENERAL_FINISH_INT 5
+
+struct calc_info
+{
+    double a;
+    double b;
+};
+
+struct cli_info
+{
+    size_t no_threads;       /* NO client threads*/
+};
+
+struct int_result
+{
+    double result;          /* client integral result */
+};
+ struct arg
+ {
+        int sd;
+        double a;
+        double b; 
+ };

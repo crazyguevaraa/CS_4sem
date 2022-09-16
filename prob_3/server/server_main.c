@@ -1,4 +1,4 @@
-#include "../clc_core/info.h"
+#include " ./clc_core/info.h"
 
 struct sockaddr* sockaddr_new() {
   return malloc(sizeof(struct sockaddr_in));
@@ -7,6 +7,9 @@ struct sockaddr* sockaddr_new() {
 socklen_t sockaddr_sizeof() {
   return sizeof(struct sockaddr_in);
 }
+
+void* client_handler(void *arg);
+void accept_forever(int server_sd, int no_threads);
 
 int main(int argc, char** argv) {
 
@@ -100,13 +103,18 @@ int main(int argc, char** argv) {
   }
 
   // ----------- 5. Start accepting clients ---------
-  accept_forever(listen_fd);
+  accept_forever(listen_fd, argv[1]);
 
   return 0;
 
 }
 
-void accept_forever(int server_sd) {
+void accept_forever(int server_sd, int no_threads) {
+  double last_end = GENERAL_START_INT;
+  double int_length = (double)(GENERAL_FINISH_INT - GENERAL_START_INT) / no_threads;
+  struct arg arg = (struct arg) malloc (sizeof(struct arg));
+  arg.res = 0;
+
   while (1) {
     int client_sd = accept(server_sd, NULL, NULL);
     if (client_sd == -1) {
@@ -114,12 +122,18 @@ void accept_forever(int server_sd) {
       fprintf(stderr, "Could not accept the client: %s\n",
               strerror(errno));
       exit(1);
-    }
+    } 
+    double a = last_end;
+    double b = a + int_length;
+    last_end = b;
+    arg.sd = client_sd;
+    arg.a = a;
+    arg.b = b;
+
     pthread_t client_handler_thread;
-    int* arg = (int *)malloc(sizeof(int));
-    *arg = client_sd;
+    
     int result = pthread_create(&client_handler_thread, NULL,
-            &client_handler, arg);
+            &client_handler, (void*) arg);
     if (result) {
       close(client_sd);
       close(server_sd);
@@ -132,7 +146,33 @@ void accept_forever(int server_sd) {
 
 void* client_handler(void *arg){
 
-  
+  /* send info for calc*/
+  struct sockaddr_in addrs;
+  socklen_t addr_len = sizeof(addrs);
+  struct arg* client_arg = (struct arg*) arg;
+  int* client_sd = client_arg->sd;
 
+  struct timeval accept_timeout = {
+            .tv_sec  = ACCEPT_TIMEOUT_SEC,
+            .tv_usec = ACCEPT_TIMEOUT_USEC
+    };
+  if (setsockopt(client_sd, SOL_SOCKET, SO_RCVTIMEO, &accept_timeout, sizeof(accept_timeout)) != 0){
+    fprintf(stderr, "setsockopt : %s\n",
+            strerror(errno));
+    exit(1);  
+  }
+  addrs.sin_family = AF_INET;
+  addrs.sin_port   = htons(CL_PORT);
+
+  struct calc_info clc_pc = (struct calc_info) malloc (sizeof(struct calc_info));
+  clc_pc.a = arg.a;
+  clc_pc.b = arg.b;
+
+  sendto(client_sd, &clc_pc, sizeof(clc_pc), 0, (struct sockaddr *)(&addrs), addr_len);
+
+
+    /* get results */
+  
+    
 }
 
