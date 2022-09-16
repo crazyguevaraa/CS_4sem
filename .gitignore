@@ -1,4 +1,4 @@
- Prerequisites
+# Prerequisites
 *.d
 
 # Object files
@@ -51,4 +51,4 @@ Module.symvers
 Mkfile.old
 dkms.conf
 
-.DC_Store
+.DS_Store
