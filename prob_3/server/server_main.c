@@ -78,7 +78,7 @@ int main(int argc, char** argv) {
   struct sockaddr_in addr;
   memset(&addr, 0, sizeof(addr));
   addr.sin_family = AF_INET;
-  addr.sin_addr = *((struct in_addr*)host_entry->h_addr);
+  addr.sin_addr = *((struct in_addr*)svr->h_addr);
   addr.sin_port = htons(SERV_PORT);
 
   int result = bind(listen_fd,
@@ -131,6 +131,8 @@ void accept_forever(int server_sd) {
 }
 
 void* client_handler(void *arg){
+
+  
 
 }
 
