@@ -18,6 +18,8 @@
 #include	<sys/wait.h>
 #include	<sys/un.h>		/* for Unix domain sockets */
 
+#include    <pthread.h>
+
 #include    <sys/time.h>
 #include    <math.h>
 

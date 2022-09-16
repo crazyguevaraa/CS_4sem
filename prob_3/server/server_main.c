@@ -1,4 +1,4 @@
-#include "./clc_core/info.h"
+#include "../clc_core/info.h"
 
 struct sockaddr* sockaddr_new() {
   return malloc(sizeof(struct sockaddr_in));
@@ -7,6 +7,7 @@ struct sockaddr* sockaddr_new() {
 socklen_t sockaddr_sizeof() {
   return sizeof(struct sockaddr_in);
 }
+#define h_addr  h_addr_list[0]
 #define MAX_PC 10
 double result[MAX_PC];
 
@@ -108,7 +109,8 @@ int main(int argc, char** argv) {
   accept_forever(listen_fd, argv[1]);
   double CLC_RES = 0;
   for(int i = 0; i > argv[1]; i++){
-    CLC_RES += result[i];
+    double a = result + i;
+    CLC_RES += a;
   }
   
   printf("CLC_RES = %f\n", CLC_RES);
@@ -139,13 +141,13 @@ void accept_forever(int server_sd, int no_threads) {
     pthread_t client_handler_thread;
     
     int result = pthread_create(&client_handler_thread, NULL,
-            &client_handler, (void*) arg);
+            client_handler, (void*) &arg);
     arg.NT++;
 
     if (result) {
       close(client_sd);
       close(server_sd);
-      free(arg);
+      //free(arg);
       fprintf(stderr, "Could not start the client handler thread.\n");
       exit(1);
     }
@@ -163,13 +165,13 @@ void* client_handler(void *arg){
   double a = client_arg->a;
   double b = client_arg->b;
   char buf [2*sizeof(double)];
-  memcpy(buf, a, sizeof(double));
-  memcpy(buf + sizeof(double), b, sizeof(double));
+  memcpy(buf, (void*) &a, sizeof(double));
+  memcpy(buf + sizeof(double), (void*) &b, sizeof(double));
 
   write(client_sd, buf, 2*sizeof(double));
 
   /* get results */
-  int NT = arg->NT;
+  int NT = client_arg->NT;
   read(client_sd, buf, sizeof(double));
   
   double pc_res;
